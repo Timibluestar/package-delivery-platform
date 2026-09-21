@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 
 type TrackingEvent = {
   id: string;
@@ -32,30 +32,27 @@ type Shipment = {
   events: TrackingEvent[];
 };
 
-function getInitialTrackingNumber() {
-  if (typeof window === "undefined") {
-    return "";
-  }
-
-  return new URLSearchParams(window.location.search).get("number") ?? "";
-}
-
 function statusLabel(status: string) {
   return status.replaceAll("_", " ");
 }
 
 export default function TrackingPage() {
-  const [trackingNumber, setTrackingNumber] = useState(
-    getInitialTrackingNumber,
-  );
+  const [trackingNumber, setTrackingNumber] = useState("");
   const [shipment, setShipment] = useState<Shipment | null>(null);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
-  async function track(number: string) {
-    const normalizedNumber = number.trim();
+  useEffect(() => {
+    const number = new URLSearchParams(window.location.search).get("number");
 
-    if (!normalizedNumber) {
+    if (number) {
+      setTrackingNumber(number);
+      void track(number);
+    }
+  }, []);
+
+  async function track(number = trackingNumber) {
+    if (!number.trim()) {
       setMessage("Enter a tracking number.");
       setShipment(null);
       return;
@@ -66,9 +63,7 @@ export default function TrackingPage() {
 
     try {
       const response = await fetch(
-        `/api/shipments/track?trackingNumber=${encodeURIComponent(
-          normalizedNumber,
-        )}`,
+        `/api/shipments/track?trackingNumber=${encodeURIComponent(number)}`,
       );
 
       const result = await response.json();
@@ -90,7 +85,7 @@ export default function TrackingPage() {
 
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    void track(trackingNumber);
+    void track();
   }
 
   return (
@@ -169,41 +164,29 @@ export default function TrackingPage() {
               <div>
                 <span>Estimated delivery</span>
                 <strong>
-                  {new Date(shipment.estimatedDelivery).toLocaleDateString(
-                    undefined,
-                    {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    },
-                  )}
+                  {new Date(shipment.estimatedDelivery).toLocaleDateString()}
                 </strong>
               </div>
             </div>
 
             <div className="tracking-timeline">
               <div className="tracking-timeline-heading">
-                <p className="eyebrow">Shipment history</p>
-                <h2>Tracking events</h2>
+                <p className="eyebrow">Tracking history</p>
+                <h2>Shipment milestones</h2>
               </div>
 
               {shipment.events.map((event) => (
                 <article className="tracking-event" key={event.id}>
                   <div className="tracking-event-marker" />
-
-                  <div className="tracking-event-content">
-                    <div className="tracking-event-top">
+                  <div>
+                    <div className="tracking-event-meta">
                       <strong>{event.title}</strong>
-                      <time dateTime={event.timestamp}>
+                      <time>
                         {new Date(event.timestamp).toLocaleString()}
                       </time>
                     </div>
-
                     <p>{event.description}</p>
-
-                    <span>
-                      {event.location} · {statusLabel(event.status)}
-                    </span>
+                    <span>{event.location}</span>
                   </div>
                 </article>
               ))}
