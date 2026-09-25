@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createShipment } from "@/lib/shipment-store";
+import { getCurrentCustomer } from "@/lib/auth";
+import { createShipment, getShipments } from "@/lib/shipment-store";
+import { sql } from "@/lib/db";
 
+import { sendNotificationEmail, getShipmentUrl } from "@/lib/email-service";
 export const dynamic = "force-dynamic";
 
 function text(value: unknown) {
@@ -9,25 +12,57 @@ function text(value: unknown) {
 
 function positiveNumber(value: unknown) {
   const number = Number(value);
-
   return Number.isFinite(number) && number > 0 ? number : null;
 }
 
 export async function GET() {
-  const { getShipments } = await import("@/lib/shipment-store");
+  try {
+    const customer = await getCurrentCustomer();
 
-  const shipments = await getShipments();
+    if (!customer) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Authentication required.",
+        },
+        { status: 401 },
+      );
+    }
 
-  return NextResponse.json({
-    success: true,
-    shipments,
-  });
+    const shipments = await getShipments(customer.id);
+
+    return NextResponse.json({
+      success: true,
+      shipments,
+    });
+  } catch (error) {
+    console.error("Get shipments error:", error);
+
+    return NextResponse.json(
+      {
+        success: false,
+        message: "Unable to load shipments.",
+      },
+      { status: 500 },
+    );
+  }
 }
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
+    const customer = await getCurrentCustomer();
 
+    if (!customer) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Authentication required.",
+        },
+        { status: 401 },
+      );
+    }
+
+    const body = await request.json();
     const sender = body.sender ?? {};
     const recipient = body.recipient ?? {};
     const packageDetails = body.package ?? {};
@@ -88,7 +123,6 @@ export async function POST(request: NextRequest) {
     }
 
     const now = new Date();
-
     const estimatedDelivery = new Date(now);
 
     estimatedDelivery.setDate(
@@ -97,9 +131,9 @@ export async function POST(request: NextRequest) {
     );
 
     const shipment = await createShipment({
+      customerId: customer.id,
       service,
       shipmentType,
-
       status: "pending",
 
       sender: {
@@ -121,15 +155,60 @@ export async function POST(request: NextRequest) {
       },
 
       package: {
-        description: text(packageDetails.description) || "General package",
+        description:
+          text(packageDetails.description) || "General package",
         weightKg,
-        lengthCm: positiveNumber(packageDetails.lengthCm) ?? undefined,
-        widthCm: positiveNumber(packageDetails.widthCm) ?? undefined,
-        heightCm: positiveNumber(packageDetails.heightCm) ?? undefined,
       },
 
       estimatedDelivery: estimatedDelivery.toISOString(),
     });
+
+    const activeAdmins = await sql`
+      SELECT
+        id,
+        email,
+        first_name,
+        last_name
+      FROM admins
+      WHERE status = 'active'
+    `;
+
+    const notificationTitle = "New shipment received";
+    const notificationMessage =
+      `Shipment ${shipment.trackingNumber} has been submitted and is awaiting review.`;
+
+    for (const admin of activeAdmins) {
+      await sql`
+        INSERT INTO notifications (
+          admin_id,
+          shipment_id,
+          type,
+          title,
+          message
+        )
+        VALUES (
+          ${admin.id},
+          ${shipment.id},
+          'new_shipment',
+          ${notificationTitle},
+          ${notificationMessage}
+        )
+      `;
+
+      await sendNotificationEmail({
+        recipient: {
+          email: admin.email,
+          name:
+            `${admin.first_name ?? ""} ${admin.last_name ?? ""}`.trim() ||
+            undefined,
+        },
+        subject: `${notificationTitle} · ${shipment.trackingNumber}`,
+        title: notificationTitle,
+        message: notificationMessage,
+        trackingNumber: shipment.trackingNumber,
+        actionUrl: getShipmentUrl(shipment.id),
+      });
+    }
 
     return NextResponse.json(
       {
@@ -139,7 +218,9 @@ export async function POST(request: NextRequest) {
       },
       { status: 201 },
     );
-  } catch {
+  } catch (error) {
+    console.error("Create shipment error:", error);
+
     return NextResponse.json(
       {
         success: false,

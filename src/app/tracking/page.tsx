@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import Image from "next/image";
 
 type TrackingEvent = {
   id: string;
@@ -9,6 +10,17 @@ type TrackingEvent = {
   description: string;
   location: string;
   timestamp: string;
+};
+
+type ShipmentMedia = {
+  id: string;
+  shipmentId: string;
+  mediaType: "package_item" | "package_photo" | "receiver_photo";
+  fileUrl: string;
+  originalFilename: string;
+  mimeType: string;
+  fileSize: number;
+  createdAt: string;
 };
 
 type Shipment = {
@@ -30,6 +42,7 @@ type Shipment = {
     weightKg: number;
   };
   events: TrackingEvent[];
+  media: ShipmentMedia[];
 };
 
 function getInitialTrackingNumber() {
@@ -208,6 +221,66 @@ export default function TrackingPage() {
                 </article>
               ))}
             </div>
+
+            {shipment.media.length > 0 && (
+              <div className="tracking-media">
+                <div className="tracking-timeline-heading">
+                  <p className="eyebrow">Package media</p>
+                  <h2>Items and delivery proof</h2>
+                  <p className="tracking-media-intro">
+                    Files associated with this shipment.
+                  </p>
+                </div>
+
+                <div className="tracking-media-grid">
+                  {shipment.media.map((media) => (
+                    <article
+                      className="tracking-media-card"
+                      key={media.id}
+                    >
+                      <div className="tracking-media-preview">
+                        {media.mimeType.startsWith("image/") ? (
+                          <Image
+                            src={media.fileUrl}
+                            alt={media.originalFilename}
+                              width={1200}
+                              height={900}
+                              unoptimized
+                          />
+                        ) : (
+                          <div className="tracking-media-document">
+                            <span>PDF</span>
+                            <strong>
+                              {media.originalFilename}
+                            </strong>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="tracking-media-details">
+                        <span>
+                          {media.mediaType === "receiver_photo"
+                            ? "Proof of delivery"
+                            : "Package item"}
+                        </span>
+
+                        <strong>{media.originalFilename}</strong>
+
+                        <a
+                          href={media.fileUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          {media.mimeType.startsWith("image/")
+                            ? "View image →"
+                            : "Open document →"}
+                        </a>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              </div>
+            )}
           </section>
         )}
       </div>

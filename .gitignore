@@ -41,3 +41,7 @@ yarn-error.log*
 next-env.d.ts
 
 /data/shipments.json
+
+.env.local
+public/uploads/shipments/*
+!public/uploads/shipments/.gitkeep
