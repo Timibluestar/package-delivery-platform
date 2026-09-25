@@ -186,7 +186,7 @@ input {
   position: relative;
   z-index: 2;
   display: grid;
-  grid-template-columns: 1fr .9fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, .9fr);
   align-items: center;
   gap: 70px;
 }
@@ -276,20 +276,22 @@ input {
 }
 
 .hero-visual {
-  min-height: 480px;
   position: relative;
+  width: 100%;
+  min-width: 0;
+  aspect-ratio: 16 / 9;
+  min-height: 0;
 }
 
 .hero-image {
   position: absolute;
   inset: 0;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
-  border-radius: 28px;
-  background:
-    linear-gradient(145deg, rgba(8,45,38,.15), rgba(4,27,23,.8)),
-    radial-gradient(circle at 65% 30%, rgba(201,238,93,.35), transparent 22%),
-    linear-gradient(135deg, #567b70 0%, #244e44 45%, #091e1a 100%);
-  box-shadow: 0 35px 80px rgba(0,0,0,.3);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
 }
 
 .hero-image::before {
@@ -731,8 +733,22 @@ input {
     min-height: auto;
   }
 
+  .hero-grid {
+    width: 100%;
+    gap: 32px;
+  }
+
   .hero-visual {
-    min-height: 430px;
+    width: 100%;
+    min-width: 0;
+    min-height: 0;
+    height: auto;
+    aspect-ratio: 16 / 9;
+  }
+
+  .hero-image {
+    width: 100%;
+    height: 100%;
   }
 
   .service-grid,
@@ -764,6 +780,24 @@ input {
 
   .hero {
     padding: 125px 0 55px;
+  }
+
+  .hero-visual {
+    width: 100%;
+    min-width: 0;
+    aspect-ratio: 16 / 9;
+  }
+
+  .hero-image {
+    width: 100%;
+    height: 100%;
+  }
+
+  .hero-delivery-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
   }
 
   .hero h1 {
@@ -1333,13 +1367,17 @@ input {
    ============================================================ */
 
 .hero-image {
-  position: relative;
+  position: absolute;
+  inset: 0;
   overflow: hidden;
 }
 
 .hero-delivery-image {
+  display: block;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  object-position: center;
+  object-position: center center;
   z-index: 0;
 }
 
@@ -6042,8 +6080,6 @@ input {
   }
 }
 
-
-
 /* Final mobile notification panel positioning.
    Uses viewport positioning so dashboard/header overflow
    cannot clip the notification panel. */
@@ -8286,3 +8322,1048 @@ input {
     object-position: left center;
   }
 }
+
+
+.hero-image .image-overlay,
+.hero-image .tracking-card,
+.hero-image .route-card,
+.hero-image .route-line {
+  display: none !important;
+}
+
+
+/* ============================================================
+   HOMEPAGE HERO — AUTHORITATIVE RESPONSIVE LAYOUT
+   ============================================================ */
+
+.homepage-hero .hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(420px, .95fr);
+  align-items: center;
+  gap: 56px;
+}
+
+.homepage-hero .hero-copy {
+  min-width: 0;
+}
+
+.homepage-hero .hero-visual {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  min-height: 520px;
+}
+
+.homepage-hero .hero-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 28px;
+  background: transparent;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, .22);
+}
+
+.homepage-hero .hero-delivery-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 28px;
+}
+
+/* The supplied hero artwork already contains its status/tracking cards. */
+.homepage-hero .image-overlay,
+.homepage-hero .tracking-card,
+.homepage-hero .route-card,
+.homepage-hero .route-line {
+  display: none;
+}
+
+/* Tablet / phone */
+@media (max-width: 900px) {
+  .homepage-hero {
+    padding-bottom: 56px;
+  }
+
+  .homepage-hero .hero-grid {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 34px;
+  }
+
+  .homepage-hero .hero-copy {
+    width: 100%;
+    max-width: 680px;
+  }
+
+  .homepage-hero .hero-visual {
+    width: 100%;
+    min-height: 0;
+    height: auto;
+    aspect-ratio: 16 / 10;
+  }
+
+  .homepage-hero .hero-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 24px;
+  }
+
+  .homepage-hero .hero-delivery-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 24px;
+  }
+}
+
+/* Phone */
+@media (max-width: 620px) {
+  .homepage-hero {
+    padding-top: 110px;
+    padding-bottom: 44px;
+  }
+
+  .homepage-hero .hero-grid {
+    gap: 30px;
+  }
+
+  .homepage-hero .hero-copy {
+    width: 100%;
+  }
+
+  .homepage-hero .hero-visual {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    min-height: 0;
+  }
+
+  .homepage-hero .hero-image,
+  .homepage-hero .hero-delivery-image {
+    border-radius: 20px;
+  }
+
+  .homepage-hero .hero-image {
+    box-shadow: 0 18px 42px rgba(0, 0, 0, .20);
+  }
+}
+
+
+/* ============================================================
+   HOMEPAGE HERO — SHOW FULL COURIER + CUSTOMER
+   ============================================================ */
+
+.homepage-hero .hero-visual {
+  width: 100% !important;
+  min-height: 0 !important;
+  height: auto !important;
+  aspect-ratio: 3 / 2 !important;
+}
+
+.homepage-hero .hero-image {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  overflow: hidden !important;
+  border-radius: 24px !important;
+}
+
+.homepage-hero .hero-delivery-image {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center center !important;
+  border-radius: 24px !important;
+}
+
+/* Mobile: put the complete photograph below the copy */
+@media (max-width: 900px) {
+  .homepage-hero .hero-grid {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 30px !important;
+  }
+
+  .homepage-hero .hero-copy {
+    grid-column: 1 !important;
+    width: 100% !important;
+  }
+
+  .homepage-hero .hero-visual {
+    grid-column: 1 !important;
+    width: 100% !important;
+    min-height: 0 !important;
+    height: auto !important;
+    aspect-ratio: 3 / 2 !important;
+  }
+
+  .homepage-hero .hero-image {
+    border-radius: 20px !important;
+  }
+
+  .homepage-hero .hero-delivery-image {
+    border-radius: 20px !important;
+    object-fit: cover !important;
+    object-position: center center !important;
+  }
+}
+
+/* Keep the embedded artwork clean; it already contains the status UI. */
+.homepage-hero .image-overlay,
+.homepage-hero .tracking-card,
+.homepage-hero .route-card,
+.homepage-hero .route-line {
+  display: none !important;
+}
+
+
+/* ============================================================
+   HERO — AUTHORITATIVE RESPONSIVE LAYOUT
+   ============================================================ */
+
+/* Desktop: two balanced columns */
+.homepage-hero .hero-grid {
+  grid-template-columns: minmax(0, 1fr) minmax(420px, .9fr);
+  align-items: center;
+  gap: 64px;
+}
+
+.homepage-hero .hero-copy {
+  min-width: 0;
+}
+
+.homepage-hero .hero-visual {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  min-height: 480px;
+}
+
+.homepage-hero .hero-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 28px;
+  box-shadow: 0 28px 70px rgba(0, 0, 0, .24);
+}
+
+.homepage-hero .hero-delivery-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+}
+
+.homepage-hero .image-overlay {
+  z-index: 1;
+}
+
+.homepage-hero .floating-card {
+  z-index: 2;
+}
+
+/* Tablet / mobile */
+@media (max-width: 900px) {
+  .homepage-hero {
+    min-height: auto;
+  }
+
+  .homepage-hero .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    align-items: stretch;
+  }
+
+  .homepage-hero .hero-copy {
+    width: 100%;
+    max-width: 680px;
+  }
+
+  .homepage-hero .hero-visual {
+    width: 100%;
+    min-height: 0;
+    aspect-ratio: 16 / 10;
+  }
+
+  .homepage-hero .hero-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 24px;
+  }
+
+  .homepage-hero .hero-delivery-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+  }
+}
+
+/* Phone */
+@media (max-width: 620px) {
+  .homepage-hero {
+    padding: 112px 0 48px;
+  }
+
+  .homepage-hero .hero-grid {
+    gap: 26px;
+  }
+
+  .homepage-hero .hero-copy {
+    width: 100%;
+  }
+
+  .homepage-hero h1 {
+    max-width: 100%;
+    margin: 20px 0 22px;
+    font-size: 52px;
+    line-height: .91;
+    letter-spacing: -3.5px;
+  }
+
+  .homepage-hero .hero-text {
+    max-width: 100%;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  .homepage-hero .hero-visual {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+  }
+
+  .homepage-hero .hero-image,
+  .homepage-hero .hero-delivery-image {
+    border-radius: 22px;
+  }
+}
+
+/* ============================================================
+   HERO IMAGE — FINAL SIZE / BOLD VISUAL OVERRIDE
+   ============================================================ */
+
+.homepage-hero .hero-grid {
+  grid-template-columns: minmax(0, 1fr) minmax(440px, 1fr);
+  gap: 48px;
+}
+
+.homepage-hero .hero-visual {
+  min-height: 520px !important;
+}
+
+.homepage-hero .hero-image {
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: 28px !important;
+  box-shadow: 0 28px 70px rgba(0, 0, 0, .26) !important;
+}
+
+.homepage-hero .hero-delivery-image {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center center !important;
+}
+
+/* Tablet */
+@media (max-width: 900px) {
+  .homepage-hero .hero-grid {
+    grid-template-columns: 1fr !important;
+    gap: 34px !important;
+  }
+
+  .homepage-hero .hero-visual {
+    width: 100% !important;
+    min-height: 0 !important;
+    aspect-ratio: 4 / 3 !important;
+  }
+
+  .homepage-hero .hero-image,
+  .homepage-hero .hero-delivery-image {
+    border-radius: 24px !important;
+  }
+}
+
+/* Phone — wider + taller hero photograph */
+@media (max-width: 620px) {
+  .homepage-hero .hero-grid {
+    gap: 30px !important;
+  }
+
+  .homepage-hero .hero-visual {
+    width: 100% !important;
+    min-height: 0 !important;
+    aspect-ratio: 4 / 3 !important;
+  }
+
+  .homepage-hero .hero-image {
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 22px !important;
+    box-shadow: 0 22px 50px rgba(0, 0, 0, .24) !important;
+  }
+
+  .homepage-hero .hero-delivery-image {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center center !important;
+    border-radius: 22px !important;
+  }
+}
+
+
+/* ============================================================
+   HERO FINAL — WIDE COMPOSITION / KEEP COURIER + CUSTOMER
+   ============================================================ */
+
+.homepage-hero .hero-visual {
+  width: 100% !important;
+  min-height: 520px !important;
+  aspect-ratio: 16 / 10 !important;
+}
+
+.homepage-hero .hero-image {
+  width: 100% !important;
+  height: 100% !important;
+  overflow: hidden !important;
+}
+
+.homepage-hero .hero-delivery-image {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center center !important;
+}
+
+/* Tablet */
+@media (max-width: 900px) {
+  .homepage-hero .hero-visual {
+    width: 100% !important;
+    min-height: 0 !important;
+    height: auto !important;
+    aspect-ratio: 16 / 10 !important;
+  }
+
+  .homepage-hero .hero-image {
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  .homepage-hero .hero-delivery-image {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center center !important;
+  }
+}
+
+/* Phone — wide photograph instead of tall crop */
+@media (max-width: 620px) {
+  .homepage-hero .hero-visual {
+    width: 100% !important;
+    min-height: 0 !important;
+    height: auto !important;
+    aspect-ratio: 16 / 10 !important;
+  }
+
+  .homepage-hero .hero-image {
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 20px !important;
+  }
+
+  .homepage-hero .hero-delivery-image {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center center !important;
+    border-radius: 20px !important;
+  }
+}
+
+
+/* ============================================================
+   HERO — USE ORIGINAL 16:9 IMAGE RATIO
+   ============================================================ */
+
+.homepage-hero .hero-delivery-image {
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  aspect-ratio: 16 / 9 !important;
+  object-fit: contain !important;
+  object-position: center !important;
+}
+
+/* Desktop */
+.homepage-hero .hero-visual {
+  aspect-ratio: 16 / 9 !important;
+}
+
+.homepage-hero .hero-image {
+  aspect-ratio: 16 / 9 !important;
+}
+
+/* Mobile */
+@media (max-width: 620px) {
+
+  .homepage-hero .hero-visual {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    aspect-ratio: 16 / 9 !important;
+  }
+
+  .homepage-hero .hero-image {
+    position: relative !important;
+    inset: auto !important;
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 16 / 9 !important;
+    overflow: hidden !important;
+    border-radius: 20px !important;
+  }
+
+  .homepage-hero .hero-delivery-image {
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 16 / 9 !important;
+    object-fit: contain !important;
+    object-position: center !important;
+    border-radius: 20px !important;
+  }
+}
+
+
+/* ============================================================
+   FINAL HERO FIX — NATURAL 16:9 IMAGE / NO EMPTY SPACE
+   ============================================================ */
+
+.homepage-hero .hero-visual {
+  position: relative !important;
+  width: 100% !important;
+  height: auto !important;
+  min-height: 0 !important;
+  aspect-ratio: 16 / 9 !important;
+}
+
+.homepage-hero .hero-image {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  overflow: hidden !important;
+  border-radius: 24px !important;
+}
+
+.homepage-hero .hero-delivery-image {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center center !important;
+  border-radius: 24px !important;
+}
+
+/* Phone */
+@media (max-width: 620px) {
+  .homepage-hero .hero-visual {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    aspect-ratio: 16 / 9 !important;
+  }
+
+  .homepage-hero .hero-image {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 20px !important;
+  }
+
+  .homepage-hero .hero-delivery-image {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center center !important;
+    border-radius: 20px !important;
+  }
+}
+
+
+/* ============================================================
+   FINAL HERO — LARGE / FULL-WIDTH IMAGE
+   ============================================================ */
+
+/* Desktop */
+.homepage-hero .hero-grid {
+  grid-template-columns: 0.78fr 1.22fr !important;
+  gap: 40px !important;
+}
+
+.homepage-hero .hero-visual {
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  aspect-ratio: 16 / 9 !important;
+}
+
+.homepage-hero .hero-image {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.homepage-hero .hero-delivery-image {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center center !important;
+}
+
+
+/* ============================================================
+   LARGE TABLET / PHONE
+   ============================================================ */
+
+@media (max-width: 1100px) {
+
+  .homepage-hero .hero-grid {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+  }
+
+  .homepage-hero .hero-copy {
+    width: 100% !important;
+    max-width: 700px !important;
+  }
+
+  .homepage-hero .hero-visual {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    aspect-ratio: 16 / 9 !important;
+  }
+
+  .homepage-hero .hero-image {
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  .homepage-hero .hero-delivery-image {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center center !important;
+  }
+}
+
+
+/* ============================================================
+   PHONE — IMAGE USES THE ENTIRE AVAILABLE WIDTH
+   ============================================================ */
+
+@media (max-width: 620px) {
+
+  .homepage-hero .hero-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    width: 100% !important;
+    gap: 28px !important;
+  }
+
+  .homepage-hero .hero-copy {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .homepage-hero .hero-visual {
+    grid-column: 1 !important;
+    width: 100% !important;
+    max-width: none !important;
+    min-height: 0 !important;
+    aspect-ratio: 16 / 9 !important;
+  }
+
+  .homepage-hero .hero-image {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 18px !important;
+  }
+
+  .homepage-hero .hero-delivery-image {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center center !important;
+    border-radius: 18px !important;
+  }
+}
+
+
+/* Balance the Experience section after removing card 02 */
+@media (min-width: 901px) {
+  .delivery-experience-grid {
+    grid-template-columns: minmax(0, 1.45fr) minmax(0, 0.75fr);
+    align-items: stretch;
+  }
+
+  .delivery-image-stack {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .delivery-image-stack .delivery-image-card {
+    flex: 1;
+    height: 100%;
+  }
+
+  .delivery-image-stack .delivery-image-wrap {
+    height: 100%;
+    min-height: 0;
+  }
+
+  .delivery-image-stack .delivery-image {
+    object-fit: cover;
+  }
+}
+
+@media (max-width: 900px) {
+  .delivery-image-stack .delivery-image-card {
+    height: auto;
+  }
+}
+
+/* TESTIMONIALS — IMAGE-ONLY CARDS */
+.testimonials-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.testimonial-card {
+  display: block;
+}
+
+.testimonial-portrait-wrap {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  min-height: 0;
+}
+
+@media (max-width: 760px) {
+  .testimonials-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .testimonial-card {
+    border-radius: 18px;
+  }
+
+  .testimonial-portrait-wrap {
+    aspect-ratio: 4 / 3;
+  }
+}
+
+@media (max-width: 420px) {
+  .testimonials-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .testimonial-portrait-wrap {
+    aspect-ratio: 4 / 3;
+  }
+}
+
+
+/* TESTIMONIAL PHOTOS — CROP OUT EMBEDDED QUOTE PANELS */
+.testimonial-portrait-wrap {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+}
+
+.testimonial-portrait {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: left center;
+  transform: scale(1.42);
+  transform-origin: left center;
+}
+
+@media (max-width: 520px) {
+  .testimonial-portrait-wrap {
+    aspect-ratio: 4 / 3;
+  }
+
+  .testimonial-portrait {
+    transform: scale(1.42);
+    transform-origin: left center;
+  }
+}
+
+
+/* TESTIMONIALS — BOLD, READABLE IMAGE CARDS */
+.testimonials-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 24px !important;
+}
+
+.testimonial-card {
+  display: block !important;
+  width: 100% !important;
+  overflow: hidden !important;
+  border-radius: 24px !important;
+}
+
+.testimonial-portrait-wrap {
+  width: 100% !important;
+  height: auto !important;
+  aspect-ratio: 16 / 10 !important;
+  overflow: hidden !important;
+}
+
+.testimonial-portrait-wrap img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  transform: none !important;
+}
+
+@media (max-width: 520px) {
+  .testimonials-grid {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+
+  .testimonial-card {
+    border-radius: 22px !important;
+  }
+
+  .testimonial-portrait-wrap {
+    aspect-ratio: 16 / 10 !important;
+  }
+}
+
+
+
+/* TESTIMONIALS — BOLD MOBILE PRESENTATION */
+@media (max-width: 520px) {
+  .testimonials-grid {
+    grid-template-columns: 1fr !important;
+    gap: 18px !important;
+    margin-top: 28px !important;
+  }
+
+  .testimonial-card {
+    width: 100% !important;
+    border-radius: 22px !important;
+  }
+
+  .testimonial-portrait-wrap {
+    width: 100% !important;
+    aspect-ratio: 16 / 10 !important;
+  }
+
+  .testimonial-portrait-wrap img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+    object-position: center !important;
+  }
+}
+
+/* GLOBAL WHATSAPP SUPPORT */
+.parcelflow-whatsapp-global {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 9999;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 12px 17px;
+  border-radius: 999px;
+  background: #b8f12b;
+  color: #12351f;
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-decoration: none;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.18);
+}
+
+.parcelflow-whatsapp-global:hover {
+  transform: translateY(-2px);
+}
+
+.parcelflow-whatsapp-global span:first-child {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border-radius: 50%;
+  background: #12351f;
+  color: #b8f12b;
+  font-size: 0.75rem;
+}
+
+@media (max-width: 520px) {
+  .parcelflow-whatsapp-global {
+    right: 12px;
+    bottom: 12px;
+    padding: 11px 14px;
+    font-size: 0.76rem;
+  }
+}
+
+/* TESTIMONIALS — LARGER IMAGES FOR READABILITY */
+@media (max-width: 520px) {
+  .testimonials-grid {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+    margin-top: 30px !important;
+  }
+
+  .testimonial-card {
+    width: 100% !important;
+    border-radius: 22px !important;
+  }
+
+  .testimonial-portrait-wrap {
+    width: 100% !important;
+    aspect-ratio: 16 / 10 !important;
+  }
+
+  .testimonial-portrait-wrap img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+    object-position: center !important;
+  }
+}
+
+/* FINAL MOBILE TESTIMONIAL IMAGE SIZE */
+@media screen and (max-width: 600px) {
+  .homepage-testimonials-section .testimonials-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    width: 100% !important;
+    gap: 22px !important;
+    margin-top: 30px !important;
+  }
+
+  .homepage-testimonials-section .testimonial-card {
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    border-radius: 22px !important;
+  }
+
+  .homepage-testimonials-section .testimonial-portrait-wrap {
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    height: auto !important;
+    aspect-ratio: 16 / 10 !important;
+    overflow: hidden !important;
+  }
+
+  .homepage-testimonials-section .testimonial-portrait-wrap img {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-width: 0 !important;
+    object-fit: contain !important;
+    object-position: center !important;
+  }
+}
+
+
+/* FINAL MOBILE TESTIMONIAL IMAGE SIZE */
+@media screen and (max-width: 600px) {
+  .homepage-testimonials-section .testimonials-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    width: 100% !important;
+    gap: 22px !important;
+    margin-top: 30px !important;
+  }
+
+  .homepage-testimonials-section .testimonial-card {
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    border-radius: 22px !important;
+  }
+
+  .homepage-testimonials-section .testimonial-portrait-wrap {
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    height: auto !important;
+    aspect-ratio: 16 / 10 !important;
+    overflow: hidden !important;
+  }
+
+  .homepage-testimonials-section .testimonial-portrait-wrap img {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-width: 0 !important;
+    object-fit: contain !important;
+    object-position: center !important;
+  }
+}
+
+
+/* TESTIMONIALS — LARGE SINGLE-COLUMN PHONE/TABLET VIEW */
+@media screen and (max-width: 1000px) {
+  .homepage-testimonials-section .testimonials-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+    width: 100% !important;
+  }
+
+  .homepage-testimonials-section .testimonial-card {
+    display: block !important;
+    width: 100% !important;
+    border-radius: 24px !important;
+  }
+
+  .homepage-testimonials-section .testimonial-portrait-wrap {
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 16 / 9 !important;
+    min-height: 0 !important;
+  }
+
+  .homepage-testimonials-section .testimonial-portrait-wrap img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+    object-position: center !important;
+  }
+}
+

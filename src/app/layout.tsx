@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
+import WhatsAppSupport from "@/components/WhatsAppSupport";
 export const metadata: Metadata = {
   title: "ParcelFlow | Global Logistics",
   description:
@@ -14,7 +15,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <WhatsAppSupport />{children}</body>
     </html>
   );
 }

@@ -45,7 +45,7 @@ const steps = [
 ];
 
 const whatsappUrl =
-  "https://wa.me/16192415211?text=Hi%20ParcelFlow%20Support%2C%20I%20need%20help%20with%20my%20shipment.";
+  "https://wa.me/16192415211?text=Hello%20ParcelFlow%20support%2C%20I%20need%20help%20with%20my%20delivery.";
 
 export default function Home() {
   return (
@@ -101,7 +101,7 @@ export default function Home() {
             <div className="hero-visual">
               <div className="hero-image">
                 <Image
-                  src="/images/delivery/hero-header.jpg"
+                  src="/images/delivery/hero-courier-customer-v2.png"
                   alt="ParcelFlow courier handing a package to a customer"
                   fill
                   priority
@@ -205,12 +205,13 @@ export default function Home() {
               <article className="delivery-image-card delivery-image-card-large">
                 <div className="delivery-image-wrap">
                   <Image
-                    src="/images/delivery/courier-loading.jpg"
+                    src="/images/delivery/experience-01.webp"
                     alt="Courier completing a package handoff"
                     fill
                     sizes="(max-width: 900px) 100vw, 58vw"
                     className="delivery-image"
-                  />
+                            unoptimized
+/>
 
                   <div className="delivery-image-overlay" />
 
@@ -225,27 +226,7 @@ export default function Home() {
               </article>
 
               <div className="delivery-image-stack">
-                <article className="delivery-image-card">
-                  <div className="delivery-image-wrap">
-                    <Image
-                      src="/images/delivery/courier-loading-v2.jpg"
-                      alt="Courier preparing parcels for delivery"
-                      fill
-                      sizes="(max-width: 900px) 100vw, 42vw"
-                      className="delivery-image"
-                    />
-
-                    <div className="delivery-image-overlay" />
-
-                    <div className="delivery-image-content">
-                      <span className="delivery-image-number">02</span>
-                      <div>
-                        <span className="delivery-image-label">In motion</span>
-                        <h3>Handled at every stage.</h3>
-                      </div>
-                    </div>
-                  </div>
-                </article>
+                
 
                 <article className="delivery-image-card">
                   <div className="delivery-image-wrap">
@@ -419,7 +400,7 @@ export default function Home() {
               <article className="homepage-media-card homepage-media-card-large">
                 <div className="homepage-media-image">
                   <Image
-                    src="/images/delivery/courier-loading-v2.jpg"
+                    src="/images/delivery/experience-01.jpg"
                     alt="ParcelFlow shipment preparation and loading"
                     width={832}
                     height={448}
@@ -439,7 +420,7 @@ export default function Home() {
               <article className="homepage-media-card">
                 <div className="homepage-media-image">
                   <Image
-                    src="/images/delivery/global-shipping.jpg"
+                    src="/images/delivery/experience-02.jpg"
                     alt="ParcelFlow delivery network"
                     width={832}
                     height={448}
@@ -458,7 +439,7 @@ export default function Home() {
               <article className="homepage-media-card">
                 <div className="homepage-media-image">
                   <Image
-                    src="/images/delivery/international-shipping.jpg"
+                    src="/images/delivery/experience-03.jpg"
                     alt="ParcelFlow international shipping"
                     width={1312}
                     height={736}
@@ -545,20 +526,7 @@ export default function Home() {
                   height={1024}
                   sizes="(max-width: 520px) 76px, 120px"
                 />
-              </div>
-              <div className="testimonial-content">
-                <div className="testimonial-stars" aria-label="5 out of 5 stars">
-                  ★★★★★
-                </div>
-                <blockquote>
-                  “ParcelFlow makes it simple to manage my deliveries and keep customers informed at every step.”
-                </blockquote>
-                <div className="testimonial-customer">
-                  <strong>Amara Okafor</strong>
-                  <span>Online Business Owner</span>
-                </div>
-              </div>
-            </article>
+              </div></article>
 
               <article className="testimonial-card">
               <div className="testimonial-portrait-wrap">
@@ -569,20 +537,7 @@ export default function Home() {
                   height={1024}
                   sizes="(max-width: 520px) 76px, 120px"
                 />
-              </div>
-              <div className="testimonial-content">
-                <div className="testimonial-stars" aria-label="5 out of 5 stars">
-                  ★★★★★
-                </div>
-                <blockquote>
-                  “The tracking updates give me confidence that every package is moving safely and that my customers know what to expect.”
-                </blockquote>
-                <div className="testimonial-customer">
-                  <strong>Daniel Williams</strong>
-                  <span>Small Business Owner</span>
-                </div>
-              </div>
-            </article>
+              </div></article>
 
               <article className="testimonial-card">
               <div className="testimonial-portrait-wrap">
@@ -593,44 +548,7 @@ export default function Home() {
                   height={1024}
                   sizes="(max-width: 520px) 76px, 120px"
                 />
-              </div>
-              <div className="testimonial-content">
-                <div className="testimonial-stars" aria-label="5 out of 5 stars">
-                  ★★★★★
-                </div>
-                <blockquote>
-                  “From collection to delivery, the process is clear, professional, and easy to follow.”
-                </blockquote>
-                <div className="testimonial-customer">
-                  <strong>Priya Mehta</strong>
-                  <span>Customer in London, UK</span>
-                </div>
-              </div>
-            </article>
-
-              <article className="testimonial-card">
-              <div className="testimonial-portrait-wrap">
-                <Image
-                  src="/images/testimonials/testimonial-4.png"
-                  alt="ParcelFlow warehouse team member preparing a customer shipment"
-                  width={1536}
-                  height={1024}
-                  sizes="(max-width: 520px) 76px, 120px"
-                />
-              </div>
-              <div className="testimonial-content">
-                <div className="testimonial-stars" aria-label="5 out of 5 stars">
-                  ★★★★★
-                </div>
-                <blockquote>
-                  “Reliable coordination and clear shipment information make it easier to keep every delivery on track.”
-                </blockquote>
-                <div className="testimonial-customer">
-                  <strong>ParcelFlow Operations Team</strong>
-                  <span>Delivery Operations</span>
-                </div>
-              </div>
-            </article>
+              </div></article>
 
               <article className="testimonial-card">
               <div className="testimonial-portrait-wrap">
@@ -641,20 +559,7 @@ export default function Home() {
                   height={1024}
                   sizes="(max-width: 520px) 76px, 120px"
                 />
-              </div>
-              <div className="testimonial-content">
-                <div className="testimonial-stars" aria-label="5 out of 5 stars">
-                  ★★★★★
-                </div>
-                <blockquote>
-                  “Fast support and clear delivery information make the whole shipping experience feel effortless.”
-                </blockquote>
-                <div className="testimonial-customer">
-                  <strong>Sophie Miller</strong>
-                  <span>Small Business Owner in Berlin</span>
-                </div>
-              </div>
-            </article>
+              </div></article>
             </div>
           </div>
         </section>
