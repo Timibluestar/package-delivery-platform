@@ -101,7 +101,7 @@ export default function Home() {
             <div className="hero-visual">
               <div className="hero-image">
                 <Image
-                  src="/images/delivery/hero-courier-customer-v2.png"
+                  src="/images/delivery/hero-header.jpg"
                   alt="ParcelFlow courier handing a package to a customer"
                   fill
                   priority
@@ -537,119 +537,124 @@ export default function Home() {
 
             <div className="testimonials-grid">
               <article className="testimonial-card">
-                <div className="testimonial-portrait-wrap">
-                  <Image
-                    src="/images/testimonials/testimonial-1.png"
-                    alt="Emmanuel Okafor, online business owner and ParcelFlow customer"
-                    width={1536}
-                    height={1024}
-                    sizes="(max-width: 520px) 76px, 120px"
-                  />
+              <div className="testimonial-portrait-wrap">
+                <Image
+                  src="/images/testimonials/testimonial-1.png"
+                  alt="Amara Okafor, online business owner and ParcelFlow customer"
+                  width={1536}
+                  height={1024}
+                  sizes="(max-width: 520px) 76px, 120px"
+                />
+              </div>
+              <div className="testimonial-content">
+                <div className="testimonial-stars" aria-label="5 out of 5 stars">
+                  ★★★★★
                 </div>
-                <div className="testimonial-content">
-                  <div className="testimonial-stars" aria-label="5 out of 5 stars">
-                    ★★★★★
-                  </div>
-                  <blockquote>
-                    “ParcelFlow makes it easy to manage my customer deliveries and keep every shipment moving.”</blockquote>
-                  <div className="testimonial-customer">
-                    <strong>Emmanuel Okafor</strong>
-                    <span>Online Business Owner</span>
-                  </div>
+                <blockquote>
+                  “ParcelFlow makes it simple to manage my deliveries and keep customers informed at every step.”
+                </blockquote>
+                <div className="testimonial-customer">
+                  <strong>Amara Okafor</strong>
+                  <span>Online Business Owner</span>
                 </div>
-              </article>
+              </div>
+            </article>
 
               <article className="testimonial-card">
-                <div className="testimonial-portrait-wrap">
-                  <Image
-                    src="/images/testimonials/testimonial-2.png"
-                    alt="James Wilson, small business owner and ParcelFlow customer"
-                    width={1536}
-                    height={1024}
-                    sizes="(max-width: 520px) 76px, 120px"
-                  />
+              <div className="testimonial-portrait-wrap">
+                <Image
+                  src="/images/testimonials/testimonial-2.png"
+                  alt="Daniel Williams, small business owner and ParcelFlow customer"
+                  width={1536}
+                  height={1024}
+                  sizes="(max-width: 520px) 76px, 120px"
+                />
+              </div>
+              <div className="testimonial-content">
+                <div className="testimonial-stars" aria-label="5 out of 5 stars">
+                  ★★★★★
                 </div>
-                <div className="testimonial-content">
-                  <div className="testimonial-stars" aria-label="5 out of 5 stars">
-                    ★★★★★
-                  </div>
-                  <blockquote>
-                    “The shipment updates give me confidence that every package is being handled and delivered properly.”</blockquote>
-                  <div className="testimonial-customer">
-                    <strong>James Wilson</strong>
-                    <span>Small Business Owner</span>
-                  </div>
+                <blockquote>
+                  “The tracking updates give me confidence that every package is moving safely and that my customers know what to expect.”
+                </blockquote>
+                <div className="testimonial-customer">
+                  <strong>Daniel Williams</strong>
+                  <span>Small Business Owner</span>
                 </div>
-              </article>
+              </div>
+            </article>
 
               <article className="testimonial-card">
-                <div className="testimonial-portrait-wrap">
-                  <Image
-                    src="/images/testimonials/testimonial-3.png"
-                    alt="Arjun Mehta, ParcelFlow customer in London"
-                    width={1536}
-                    height={1024}
-                    sizes="(max-width: 520px) 76px, 120px"
-                  />
+              <div className="testimonial-portrait-wrap">
+                <Image
+                  src="/images/testimonials/testimonial-3.png"
+                  alt="Priya Mehta, international customer and ParcelFlow user in London"
+                  width={1536}
+                  height={1024}
+                  sizes="(max-width: 520px) 76px, 120px"
+                />
+              </div>
+              <div className="testimonial-content">
+                <div className="testimonial-stars" aria-label="5 out of 5 stars">
+                  ★★★★★
                 </div>
-                <div className="testimonial-content">
-                  <div className="testimonial-stars" aria-label="5 out of 5 stars">
-                    ★★★★★
-                  </div>
-                  <blockquote>
-                    “The process is simple, professional, and easy to follow from collection through delivery.”</blockquote>
-                  <div className="testimonial-customer">
-                    <strong>Arjun Mehta</strong>
-                    <span>London, UK</span>
-                  </div>
+                <blockquote>
+                  “From collection to delivery, the process is clear, professional, and easy to follow.”
+                </blockquote>
+                <div className="testimonial-customer">
+                  <strong>Priya Mehta</strong>
+                  <span>Customer in London, UK</span>
                 </div>
-              </article>
+              </div>
+            </article>
 
               <article className="testimonial-card">
-                <div className="testimonial-portrait-wrap">
-                  <Image
-                    src="/images/testimonials/testimonial-4.png"
-                    alt="ParcelFlow warehouse team member preparing a package"
-                    width={1536}
-                    height={1024}
-                    sizes="(max-width: 520px) 76px, 120px"
-                  />
+              <div className="testimonial-portrait-wrap">
+                <Image
+                  src="/images/testimonials/testimonial-4.png"
+                  alt="ParcelFlow warehouse team member preparing a customer shipment"
+                  width={1536}
+                  height={1024}
+                  sizes="(max-width: 520px) 76px, 120px"
+                />
+              </div>
+              <div className="testimonial-content">
+                <div className="testimonial-stars" aria-label="5 out of 5 stars">
+                  ★★★★★
                 </div>
-                <div className="testimonial-content">
-                  <div className="testimonial-stars" aria-label="5 out of 5 stars">
-                    ★★★★★
-                  </div>
-                  <blockquote>
-                    “Careful package handling helps keep every shipment organized from the warehouse to the customer.”</blockquote>
-                  <div className="testimonial-customer">
-                    <strong>ParcelFlow Warehouse Team</strong>
-                    <span>ParcelFlow Logistics</span>
-                  </div>
+                <blockquote>
+                  “Reliable coordination and clear shipment information make it easier to keep every delivery on track.”
+                </blockquote>
+                <div className="testimonial-customer">
+                  <strong>ParcelFlow Operations Team</strong>
+                  <span>Delivery Operations</span>
                 </div>
-              </article>
+              </div>
+            </article>
 
               <article className="testimonial-card">
-                <div className="testimonial-portrait-wrap">
-                  <Image
-                    src="/images/testimonials/testimonial-5.png"
-                    alt="Sophie Miller, ParcelFlow customer in Berlin"
-                    width={1536}
-                    height={1024}
-                    sizes="(max-width: 520px) 76px, 120px"
-                  />
+              <div className="testimonial-portrait-wrap">
+                <Image
+                  src="/images/testimonials/testimonial-5.png"
+                  alt="Sophie Miller, small business owner and ParcelFlow customer in Berlin"
+                  width={1536}
+                  height={1024}
+                  sizes="(max-width: 520px) 76px, 120px"
+                />
+              </div>
+              <div className="testimonial-content">
+                <div className="testimonial-stars" aria-label="5 out of 5 stars">
+                  ★★★★★
                 </div>
-                <div className="testimonial-content">
-                  <div className="testimonial-stars" aria-label="5 out of 5 stars">
-                    ★★★★★
-                  </div>
-                  <blockquote>
-                    “Fast support and clear shipment information made the whole experience feel effortless.”</blockquote>
-                  <div className="testimonial-customer">
-                    <strong>Sophie Miller</strong>
-                    <span>Berlin, Germany</span>
-                  </div>
+                <blockquote>
+                  “Fast support and clear delivery information make the whole shipping experience feel effortless.”
+                </blockquote>
+                <div className="testimonial-customer">
+                  <strong>Sophie Miller</strong>
+                  <span>Small Business Owner in Berlin</span>
                 </div>
-              </article>
+              </div>
+            </article>
             </div>
           </div>
         </section>
