@@ -91,6 +91,46 @@ export async function POST(request: Request) {
         created_at
     `;
 
+    // Offline admin notification: this does not depend on Resend,
+    // email outbox processing, or cron-job.org.
+    try {
+      const activeAdmins = await sql`
+        SELECT id
+        FROM admins
+        WHERE status = 'active'
+      `;
+
+      const notificationTitle = "New customer registered";
+      const notificationMessage =
+        `${firstName} ${lastName} created a new ParcelFlow customer account (${email}).`;
+
+      for (const admin of activeAdmins) {
+        await sql`
+          INSERT INTO notifications (
+            admin_id,
+            shipment_id,
+            type,
+            title,
+            message
+          )
+          VALUES (
+            ${admin.id},
+            NULL,
+            'new_customer',
+            ${notificationTitle},
+            ${notificationMessage}
+          )
+        `;
+      }
+    } catch (notificationError) {
+      // Never make a successful customer registration fail because
+      // an offline admin notification could not be created.
+      console.error(
+        "Customer registration notification error:",
+        notificationError,
+      );
+    }
+
     return NextResponse.json(
       {
         success: true,
