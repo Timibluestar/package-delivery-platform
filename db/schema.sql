@@ -334,3 +334,47 @@ CREATE INDEX IF NOT EXISTS idx_shipments_price_disclosed
 CREATE INDEX IF NOT EXISTS idx_shipments_admin_processed
     ON shipments(admin_processed_at);
 
+
+CREATE TABLE IF NOT EXISTS payment_submissions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    shipment_id UUID NOT NULL
+        REFERENCES shipments(id)
+        ON DELETE CASCADE,
+
+    customer_id UUID NOT NULL
+        REFERENCES customers(id)
+        ON DELETE CASCADE,
+
+    file_url TEXT NOT NULL,
+    original_filename VARCHAR(255) NOT NULL,
+    mime_type VARCHAR(100) NOT NULL,
+    file_size INTEGER NOT NULL,
+
+    note TEXT,
+
+    status VARCHAR(20) NOT NULL DEFAULT 'pending'
+        CHECK (status IN ('pending', 'confirmed', 'rejected')),
+
+    reviewed_by_admin_id UUID
+        REFERENCES admins(id)
+        ON DELETE SET NULL,
+
+    reviewed_at TIMESTAMPTZ,
+    rejection_reason TEXT,
+
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_payment_submissions_shipment_id
+    ON payment_submissions(shipment_id);
+
+CREATE INDEX IF NOT EXISTS idx_payment_submissions_customer_id
+    ON payment_submissions(customer_id);
+
+CREATE INDEX IF NOT EXISTS idx_payment_submissions_status
+    ON payment_submissions(status);
+
+CREATE INDEX IF NOT EXISTS idx_payment_submissions_created_at
+    ON payment_submissions(created_at DESC);

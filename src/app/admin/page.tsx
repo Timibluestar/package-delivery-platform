@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { getCurrentAdmin } from "@/lib/admin-auth";
 import AdminShipments from "@/components/admin/AdminShipments";
 import AdminNotificationCenter from "@/components/admin/AdminNotificationCenter";
+import AdminPaymentProofs from "@/components/admin/AdminPaymentProofs";
 
 export const dynamic = "force-dynamic";
 
@@ -55,6 +56,13 @@ export default async function AdminDashboardPage() {
               >
                 Notifications
               </a>
+
+              <a
+                className="admin-dashboard-nav-link"
+                href="/admin/mail"
+              >
+                Mail
+              </a>
             </div>
 
             <div className="admin-dashboard-account">
@@ -91,6 +99,8 @@ export default async function AdminDashboardPage() {
           </div>
 
           <div id="shipment-operations">
+            <AdminPaymentProofs />
+
             <AdminShipments />
           </div>
         </div>
