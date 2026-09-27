@@ -122,6 +122,9 @@ export async function POST(request: Request) {
       </div>
     `;
 
+    const resetRecipientEmail =
+      process.env.ADMIN_RESET_TEST_RECIPIENT?.trim() || admin.email;
+
     await sql`
       INSERT INTO notification_email_outbox (
         recipient_email,
@@ -133,7 +136,7 @@ export async function POST(request: Request) {
         next_attempt_at
       )
       VALUES (
-        ${admin.email},
+        ${resetRecipientEmail},
         ${recipientName || null},
         'ParcelFlow administrator password reset',
         ${html},
