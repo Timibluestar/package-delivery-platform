@@ -19,9 +19,7 @@ export async function GET() {
       sql`
         SELECT
           COUNT(DISTINCT c.id)::int AS total_users,
-          COUNT(DISTINCT c.id) FILTER (
-            WHERE COALESCE(c.status, 'active') = 'active'
-          )::int AS active_users,
+          COUNT(DISTINCT c.id)::int AS active_users,
           COUNT(DISTINCT c.id) FILTER (
             WHERE c.created_at >= date_trunc('month', NOW())
           )::int AS new_this_month,
@@ -36,7 +34,6 @@ export async function GET() {
           c.first_name,
           c.last_name,
           c.email,
-          c.status,
           c.created_at,
           COUNT(s.id)::int AS shipment_count,
           COUNT(s.id) FILTER (
@@ -59,7 +56,6 @@ export async function GET() {
           c.first_name,
           c.last_name,
           c.email,
-          c.status,
           c.created_at
         ORDER BY c.created_at DESC
         LIMIT 100
