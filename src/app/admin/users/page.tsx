@@ -40,11 +40,11 @@ export default function AdminUsersPage() {
     return value === "has" || value === "none" ? value : "all";
   });
 
-  const [activityFilter, setActivityFilter] = useState(() => {
+  const [activityFilter, setActivityFilter] = useState<string>(() => {
     if (typeof window === "undefined") return "all";
     const value = new URLSearchParams(window.location.search).get("activity");
     return ["pending", "active", "delivered"].includes(value ?? "")
-      ? value
+      ? (value ?? "all")
       : "all";
   });
 
@@ -54,7 +54,7 @@ export default function AdminUsersPage() {
     const updateFromUrl = () => {
       const nextSearch = params.get("search") ?? "";
       const nextShipment = params.get("shipments");
-      const nextActivity = params.get("activity");
+      const nextActivity = params.get("activity") ?? "";
 
       setSearch(nextSearch);
       setShipmentFilter(
@@ -63,9 +63,9 @@ export default function AdminUsersPage() {
           : "all",
       );
       setActivityFilter(
-        nextActivity === "pending" ||
-        nextActivity === "active" ||
-        nextActivity === "delivered"
+        (nextActivity ?? "") === "pending" ||
+        (nextActivity ?? "") === "active" ||
+        (nextActivity ?? "") === "delivered"
           ? nextActivity
           : "all",
       );
@@ -83,11 +83,11 @@ export default function AdminUsersPage() {
           : "all",
       );
 
-      const nextActivity = currentParams.get("activity");
+      const nextActivity = currentParams.get("activity") ?? "";
       setActivityFilter(
-        nextActivity === "pending" ||
-        nextActivity === "active" ||
-        nextActivity === "delivered"
+        (nextActivity ?? "") === "pending" ||
+        (nextActivity ?? "") === "active" ||
+        (nextActivity ?? "") === "delivered"
           ? nextActivity
           : "all",
       );
@@ -304,7 +304,7 @@ export default function AdminUsersPage() {
             </select>
 
             <select
-              value={activityFilter}
+              value={activityFilter || "all"}
               onChange={(event) => setActivityFilter(event.target.value)}
               aria-label="Filter by shipment activity"
               style={{
