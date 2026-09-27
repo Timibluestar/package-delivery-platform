@@ -45,6 +45,13 @@ export default async function AdminDashboardPage() {
 
               <a
                 className="admin-dashboard-nav-link"
+                href="/admin/users"
+              >
+                Users
+              </a>
+
+              <a
+                className="admin-dashboard-nav-link"
                 href="#shipment-operations"
               >
                 Shipments
