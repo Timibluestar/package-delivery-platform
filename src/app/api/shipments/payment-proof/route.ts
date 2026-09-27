@@ -1,10 +1,7 @@
 import { NextResponse } from "next/server";
 import { getCurrentCustomer } from "@/lib/auth";
 import { sql } from "@/lib/db";
-import {
-  saveShipmentMedia,
-  validateShipmentMedia,
-} from "@/lib/shipment-media";
+import { validateShipmentMedia } from "@/lib/shipment-media";
 
 export const runtime = "nodejs";
 
@@ -20,7 +17,6 @@ export async function POST(request: Request) {
     }
 
     const formData = await request.formData();
-
     const shipmentId = String(formData.get("shipmentId") ?? "").trim();
     const note = String(formData.get("note") ?? "").trim();
     const file = formData.get("file");
@@ -87,12 +83,6 @@ export async function POST(request: Request) {
       );
     }
 
-    const savedMedia = await saveShipmentMedia({
-      shipmentId: shipment.id,
-      mediaType: "package_item",
-      file,
-    });
-
     const previousRejectedRows = await sql`
       SELECT id
       FROM payment_submissions
@@ -105,6 +95,9 @@ export async function POST(request: Request) {
 
     const isResubmission = previousRejectedRows.length > 0;
 
+    const fileData = Buffer.from(await file.arrayBuffer());
+    const mimeType = file.type || "application/octet-stream";
+
     const paymentRows = await sql`
       INSERT INTO payment_submissions (
         shipment_id,
@@ -113,16 +106,20 @@ export async function POST(request: Request) {
         original_filename,
         mime_type,
         file_size,
+        file_data,
+        storage_type,
         note,
         status
       )
       VALUES (
         ${shipment.id},
         ${customer.id},
-        ${savedMedia.fileUrl},
+        '',
         ${file.name},
-        ${file.type || "application/octet-stream"},
+        ${mimeType},
         ${file.size},
+        ${fileData},
+        'database',
         ${note || null},
         'pending'
       )
@@ -140,6 +137,18 @@ export async function POST(request: Request) {
     `;
 
     const paymentSubmission = paymentRows[0];
+
+    const privateFileUrl = `/api/payment-proofs/${paymentSubmission.id}/file`;
+
+    await sql`
+      UPDATE payment_submissions
+      SET
+        file_url = ${privateFileUrl},
+        updated_at = NOW()
+      WHERE id = ${paymentSubmission.id}
+    `;
+
+    paymentSubmission.file_url = privateFileUrl;
 
     try {
       const activeAdmins = await sql`

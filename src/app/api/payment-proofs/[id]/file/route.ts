@@ -2,8 +2,6 @@ import { NextResponse } from "next/server";
 import { getCurrentCustomer } from "@/lib/auth";
 import { requireAdmin } from "@/lib/admin-auth";
 import { sql } from "@/lib/db";
-import { readFile } from "node:fs/promises";
-import path from "node:path";
 
 export const runtime = "nodejs";
 
@@ -19,7 +17,7 @@ export async function GET(request: Request, context: RouteContext) {
       SELECT
         id,
         customer_id,
-        file_url,
+        file_data,
         original_filename,
         mime_type
       FROM payment_submissions
@@ -60,43 +58,39 @@ export async function GET(request: Request, context: RouteContext) {
       );
     }
 
-    const relativePath = String(proof.file_url)
-      .replace(/^\/+/, "")
-      .replace(/\.\./g, "");
-
-    const filePath = path.join(process.cwd(), "public", relativePath);
-
-    const publicRoot = path.resolve(process.cwd(), "public");
-    const resolvedFilePath = path.resolve(filePath);
-
-    if (
-      resolvedFilePath !== publicRoot &&
-      !resolvedFilePath.startsWith(`${publicRoot}${path.sep}`)
-    ) {
+    if (!proof.file_data) {
       return NextResponse.json(
-        { success: false, message: "Invalid file path." },
-        { status: 400 },
+        {
+          success: false,
+          message: "Payment proof file is not available.",
+        },
+        { status: 404 },
       );
     }
 
-    const fileBuffer = await readFile(resolvedFilePath);
+    const fileBuffer = Buffer.from(proof.file_data);
 
     return new NextResponse(fileBuffer, {
       status: 200,
       headers: {
-        "Content-Type": proof.mime_type || "application/octet-stream",
+        "Content-Type":
+          proof.mime_type || "application/octet-stream",
         "Content-Disposition": `inline; filename="${String(
           proof.original_filename,
         ).replace(/["\\\r\n]/g, "_")}"`,
         "Cache-Control": "private, no-store",
         "X-Content-Type-Options": "nosniff",
+        "Content-Security-Policy": "default-src 'none'; sandbox",
       },
     });
   } catch (error) {
     console.error("Payment proof file access error:", error);
 
     return NextResponse.json(
-      { success: false, message: "Unable to access payment proof." },
+      {
+        success: false,
+        message: "Unable to access payment proof.",
+      },
       { status: 404 },
     );
   }
