@@ -9367,3 +9367,252 @@ input {
   }
 }
 
+
+/* Admin mail center */
+.admin-mail-compose {
+  margin-top: 28px;
+  padding: 28px;
+  background: #ffffff;
+  border: 1px solid #dfe8e3;
+  border-radius: 22px;
+}
+
+.admin-mail-form {
+  display: grid;
+  gap: 20px;
+  margin-top: 24px;
+}
+
+.admin-mail-field {
+  display: grid;
+  gap: 8px;
+}
+
+.admin-mail-field label {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.admin-mail-field input,
+.admin-mail-field select,
+.admin-mail-field textarea,
+.admin-mail-picker-toolbar input {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #ccd8d2;
+  border-radius: 12px;
+  padding: 13px 14px;
+  background: #ffffff;
+  color: var(--ink);
+  font: inherit;
+}
+
+.admin-mail-field textarea {
+  min-height: 220px;
+  resize: vertical;
+}
+
+.admin-mail-field small {
+  color: #71807b;
+}
+
+.admin-mail-recipient-picker {
+  display: grid;
+  gap: 12px;
+  border: 1px solid #dfe8e3;
+  border-radius: 16px;
+  padding: 16px;
+  background: #f8faf8;
+}
+
+.admin-mail-picker-toolbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+}
+
+.admin-mail-picker-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.admin-mail-picker-actions button {
+  border: 1px solid #ccd8d2;
+  border-radius: 10px;
+  padding: 10px 13px;
+  background: #ffffff;
+  color: var(--ink);
+  cursor: pointer;
+  font: inherit;
+}
+
+.admin-mail-customer-list {
+  max-height: 320px;
+  overflow: auto;
+  display: grid;
+  gap: 4px;
+}
+
+.admin-mail-customer-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.admin-mail-customer-row:hover {
+  background: #eef4ef;
+}
+
+.admin-mail-customer-row input {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+}
+
+.admin-mail-customer-row span {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+
+.admin-mail-customer-row strong {
+  color: var(--ink);
+}
+
+.admin-mail-customer-row small {
+  color: #71807b;
+  overflow-wrap: anywhere;
+}
+
+.admin-mail-submit-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: 4px;
+}
+
+.admin-primary-button {
+  border: 0;
+  border-radius: 12px;
+  padding: 13px 18px;
+  background: var(--green);
+  color: #ffffff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.admin-primary-button:hover {
+  background: var(--green-dark);
+}
+
+.admin-primary-button:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+.admin-mail-feedback {
+  padding: 13px 15px;
+  border-radius: 12px;
+  background: #eef7df;
+  color: #31530d;
+  font-weight: 600;
+}
+
+.admin-mail-activity {
+  display: grid;
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid #dfe8e3;
+  border-radius: 14px;
+}
+
+.admin-mail-activity-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 15px 16px;
+  background: #ffffff;
+  border-bottom: 1px solid #e8eeea;
+}
+
+.admin-mail-activity-row:last-child {
+  border-bottom: 0;
+}
+
+.admin-mail-activity-row > div:first-child {
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.admin-mail-activity-row strong {
+  overflow-wrap: anywhere;
+}
+
+.admin-mail-activity-row span {
+  color: #71807b;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+.admin-mail-status {
+  flex: 0 0 auto;
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+
+.admin-mail-status.pending {
+  background: #fff4d6;
+  color: #7a5700;
+}
+
+.admin-mail-status.sent {
+  background: #e6f5e9;
+  color: #22633a;
+}
+
+.admin-mail-status.failed {
+  background: #fde8e7;
+  color: #8a2924;
+}
+
+@media (max-width: 720px) {
+  .admin-mail-compose {
+    padding: 20px;
+  }
+
+  .admin-mail-picker-toolbar,
+  .admin-mail-submit-row {
+    grid-template-columns: 1fr;
+    display: grid;
+  }
+
+  .admin-mail-picker-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .admin-mail-activity-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+.admin-mail-error {
+  display: block;
+  margin-top: 6px;
+  color: #a33b2a;
+  font-size: 12px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
