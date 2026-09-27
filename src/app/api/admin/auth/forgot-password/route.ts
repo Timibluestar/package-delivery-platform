@@ -2,6 +2,17 @@ import { NextResponse } from "next/server";
 import { createAdminPasswordResetToken } from "@/lib/admin-auth";
 import { sql } from "@/lib/db";
 
+export const dynamic = "force-dynamic";
+
+function escapeHtml(value: string) {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
@@ -22,7 +33,11 @@ export async function POST(request: Request) {
     }
 
     const rows = await sql`
-      SELECT id
+      SELECT
+        id,
+        email,
+        first_name,
+        last_name
       FROM admins
       WHERE LOWER(email) = ${email}
         AND status = 'active'
@@ -30,7 +45,12 @@ export async function POST(request: Request) {
     `;
 
     const admin = rows[0] as
-      | { id: string }
+      | {
+          id: string;
+          email: string;
+          first_name: string;
+          last_name: string;
+        }
       | undefined;
 
     /*
@@ -45,46 +65,91 @@ export async function POST(request: Request) {
       });
     }
 
-    const reset = await createAdminPasswordResetToken(
-      admin.id,
-    );
+    const reset = await createAdminPasswordResetToken(admin.id);
 
-    const baseUrl =
+    const baseUrl = (
       process.env.APP_URL ||
       process.env.NEXT_PUBLIC_APP_URL ||
-      new URL(request.url).origin;
+      new URL(request.url).origin
+    ).replace(/\/$/, "");
 
     const resetUrl =
       `${baseUrl}/admin/reset-password?token=` +
       encodeURIComponent(reset.token);
 
-    const response: {
-      success: boolean;
-      message: string;
-      resetUrl?: string;
-      expiresAt?: string;
-    } = {
+    const recipientName =
+      `${admin.first_name} ${admin.last_name}`.trim();
+
+    const safeName = escapeHtml(recipientName || "Administrator");
+    const safeResetUrl = escapeHtml(resetUrl);
+
+    const html = `
+      <div style="font-family:Arial,Helvetica,sans-serif;line-height:1.6;color:#10231f;max-width:620px;margin:0 auto;padding:32px 20px;">
+        <div style="margin-bottom:24px;">
+          <div style="font-size:24px;font-weight:700;">ParcelFlow</div>
+          <div style="font-size:13px;color:#64746f;">Global Logistics · Administration</div>
+        </div>
+
+        <h1 style="font-size:28px;margin:0 0 16px;">Reset your administrator password</h1>
+
+        <p>Hello ${safeName},</p>
+
+        <p>
+          A password reset was requested for your ParcelFlow administrator account.
+          If you made this request, use the button below to create a new password.
+        </p>
+
+        <p style="margin:28px 0;">
+          <a
+            href="${safeResetUrl}"
+            style="display:inline-block;background:#0d5c4a;color:#ffffff;text-decoration:none;padding:13px 20px;border-radius:8px;font-weight:700;"
+          >
+            Reset administrator password
+          </a>
+        </p>
+
+        <p>
+          This reset link expires in 30 minutes and can only be used once.
+        </p>
+
+        <p style="font-size:13px;color:#64746f;">
+          If you did not request this reset, you can safely ignore this email.
+        </p>
+
+        <p style="font-size:12px;color:#8a9793;margin-top:32px;">
+          ParcelFlow · Global Logistics
+        </p>
+      </div>
+    `;
+
+    await sql`
+      INSERT INTO notification_email_outbox (
+        recipient_email,
+        recipient_name,
+        subject,
+        html_body,
+        status,
+        attempts,
+        next_attempt_at
+      )
+      VALUES (
+        ${admin.email},
+        ${recipientName || null},
+        'ParcelFlow administrator password reset',
+        ${html},
+        'pending',
+        0,
+        NOW()
+      )
+    `;
+
+    return NextResponse.json({
       success: true,
       message:
-        "Password reset instructions have been generated.",
-    };
-
-    /*
-     * Until an email provider is connected, expose the reset URL
-     * only outside production. In production the reset URL must be
-     * delivered through a configured email provider instead.
-     */
-    if (process.env.NODE_ENV !== "production") {
-      response.resetUrl = resetUrl;
-      response.expiresAt = reset.expiresAt;
-    }
-
-    return NextResponse.json(response);
+        "If an active administrator account exists for that email, reset instructions are available.",
+    });
   } catch (error) {
-    console.error(
-      "Admin forgot-password error:",
-      error,
-    );
+    console.error("Admin forgot-password error:", error);
 
     return NextResponse.json(
       {
