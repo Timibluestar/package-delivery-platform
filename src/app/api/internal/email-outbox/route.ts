@@ -140,7 +140,7 @@ export async function GET(request: NextRequest) {
             attempts = attempts + 1,
             sent_at = NOW(),
             last_error = NULL,
-            next_attempt_at = NULL,
+            next_attempt_at = NOW(),
             locked_at = NULL
           WHERE id = ${row.id}
         `;
@@ -162,7 +162,7 @@ export async function GET(request: NextRequest) {
               status = 'failed',
               attempts = attempts + 1,
               last_error = ${message},
-              next_attempt_at = NULL,
+              next_attempt_at = NOW(),
               locked_at = NULL
             WHERE id = ${row.id}
           `;
