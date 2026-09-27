@@ -29,9 +29,110 @@ export default function AdminUsersPage() {
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [search, setSearch] = useState("");
-  const [shipmentFilter, setShipmentFilter] = useState("all");
-  const [activityFilter, setActivityFilter] = useState("all");
+  const [search, setSearch] = useState(() => {
+    if (typeof window === "undefined") return "";
+    return new URLSearchParams(window.location.search).get("search") ?? "";
+  });
+
+  const [shipmentFilter, setShipmentFilter] = useState(() => {
+    if (typeof window === "undefined") return "all";
+    const value = new URLSearchParams(window.location.search).get("shipments");
+    return value === "has" || value === "none" ? value : "all";
+  });
+
+  const [activityFilter, setActivityFilter] = useState(() => {
+    if (typeof window === "undefined") return "all";
+    const value = new URLSearchParams(window.location.search).get("activity");
+    return ["pending", "active", "delivered"].includes(value ?? "")
+      ? value
+      : "all";
+  });
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+
+    const updateFromUrl = () => {
+      const nextSearch = params.get("search") ?? "";
+      const nextShipment = params.get("shipments");
+      const nextActivity = params.get("activity");
+
+      setSearch(nextSearch);
+      setShipmentFilter(
+        nextShipment === "has" || nextShipment === "none"
+          ? nextShipment
+          : "all",
+      );
+      setActivityFilter(
+        nextActivity === "pending" ||
+        nextActivity === "active" ||
+        nextActivity === "delivered"
+          ? nextActivity
+          : "all",
+      );
+    };
+
+    const handlePopState = () => {
+      const currentParams = new URLSearchParams(window.location.search);
+
+      setSearch(currentParams.get("search") ?? "");
+
+      const nextShipment = currentParams.get("shipments");
+      setShipmentFilter(
+        nextShipment === "has" || nextShipment === "none"
+          ? nextShipment
+          : "all",
+      );
+
+      const nextActivity = currentParams.get("activity");
+      setActivityFilter(
+        nextActivity === "pending" ||
+        nextActivity === "active" ||
+        nextActivity === "delivered"
+          ? nextActivity
+          : "all",
+      );
+    };
+
+    window.addEventListener("popstate", handlePopState);
+    updateFromUrl();
+
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, []);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+
+    if (search.trim()) {
+      params.set("search", search.trim());
+    } else {
+      params.delete("search");
+    }
+
+    if (shipmentFilter !== "all") {
+      params.set("shipments", shipmentFilter);
+    } else {
+      params.delete("shipments");
+    }
+
+    if (activityFilter !== "all") {
+      params.set("activity", activityFilter);
+    } else {
+      params.delete("activity");
+    }
+
+    const query = params.toString();
+    const nextUrl = query
+      ? `${window.location.pathname}?${query}`
+      : window.location.pathname;
+
+    const currentUrl =
+      window.location.pathname +
+      (window.location.search ? window.location.search : "");
+
+    if (nextUrl !== currentUrl) {
+      window.history.replaceState({}, "", nextUrl);
+    }
+  }, [search, shipmentFilter, activityFilter]);
 
   useEffect(() => {
     let cancelled = false;
