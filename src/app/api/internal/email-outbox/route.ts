@@ -39,7 +39,15 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    if (request.headers.get("authorization") !== `Bearer ${cronSecret}`) {
+    const authorizationHeader = request.headers.get("authorization");
+    const bearerSecret = authorizationHeader?.startsWith("Bearer ")
+      ? authorizationHeader.slice(7).trim()
+      : "";
+
+    const querySecret =
+      new URL(request.url).searchParams.get("secret")?.trim() || "";
+
+    if (bearerSecret !== cronSecret && querySecret !== cronSecret) {
       return NextResponse.json(
         { success: false, message: "Unauthorized." },
         { status: 401 },
