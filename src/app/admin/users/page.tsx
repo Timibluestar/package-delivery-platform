@@ -29,6 +29,9 @@ export default function AdminUsersPage() {
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [search, setSearch] = useState("");
+  const [shipmentFilter, setShipmentFilter] = useState("all");
+  const [activityFilter, setActivityFilter] = useState("all");
 
   useEffect(() => {
     let cancelled = false;
@@ -68,6 +71,31 @@ export default function AdminUsersPage() {
       cancelled = true;
     };
   }, []);
+
+  const filteredCustomers = customers.filter((customer) => {
+    const name =
+      `${customer.first_name ?? ""} ${customer.last_name ?? ""}`.trim();
+
+    const searchText = search.trim().toLowerCase();
+
+    const matchesSearch =
+      !searchText ||
+      name.toLowerCase().includes(searchText) ||
+      customer.email.toLowerCase().includes(searchText);
+
+    const matchesShipment =
+      shipmentFilter === "all" ||
+      (shipmentFilter === "none" && customer.shipment_count === 0) ||
+      (shipmentFilter === "has" && customer.shipment_count > 0);
+
+    const matchesActivity =
+      activityFilter === "all" ||
+      (activityFilter === "pending" && customer.pending_shipments > 0) ||
+      (activityFilter === "active" && customer.active_shipments > 0) ||
+      (activityFilter === "delivered" && customer.delivered_shipments > 0);
+
+    return matchesSearch && matchesShipment && matchesActivity;
+  });
 
   return (
     <main className="container" style={{ paddingTop: 140, paddingBottom: 80 }}>
@@ -133,10 +161,115 @@ export default function AdminUsersPage() {
           </p>
         </div>
 
+        {!loading && customers.length > 0 && (
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "minmax(240px, 2fr) repeat(2, minmax(180px, 1fr))",
+              gap: 12,
+              marginBottom: 24,
+            }}
+          >
+            <input
+              type="search"
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+              placeholder="Search name or email..."
+              aria-label="Search customers by name or email"
+              style={{
+                width: "100%",
+                padding: "12px 14px",
+                border: "1px solid #d7dfda",
+                borderRadius: 10,
+                background: "#fff",
+              }}
+            />
+
+            <select
+              value={shipmentFilter}
+              onChange={(event) => setShipmentFilter(event.target.value)}
+              aria-label="Filter by shipment count"
+              style={{
+                width: "100%",
+                padding: "12px 14px",
+                border: "1px solid #d7dfda",
+                borderRadius: 10,
+                background: "#fff",
+              }}
+            >
+              <option value="all">All shipment counts</option>
+              <option value="has">Has shipments</option>
+              <option value="none">No shipments</option>
+            </select>
+
+            <select
+              value={activityFilter}
+              onChange={(event) => setActivityFilter(event.target.value)}
+              aria-label="Filter by shipment activity"
+              style={{
+                width: "100%",
+                padding: "12px 14px",
+                border: "1px solid #d7dfda",
+                borderRadius: 10,
+                background: "#fff",
+              }}
+            >
+              <option value="all">All activity</option>
+              <option value="pending">Pending shipments</option>
+              <option value="active">Active shipments</option>
+              <option value="delivered">Delivered shipments</option>
+            </select>
+
+            <button
+              type="button"
+              onClick={() => {
+                setSearch("");
+                setShipmentFilter("all");
+                setActivityFilter("all");
+              }}
+              disabled={
+                !search &&
+                shipmentFilter === "all" &&
+                activityFilter === "all"
+              }
+              style={{
+                width: "100%",
+                padding: "12px 14px",
+                border: "1px solid #d7dfda",
+                borderRadius: 10,
+                background: "#f4f7f3",
+                cursor:
+                  search ||
+                  shipmentFilter !== "all" ||
+                  activityFilter !== "all"
+                    ? "pointer"
+                    : "not-allowed",
+                opacity:
+                  search ||
+                  shipmentFilter !== "all" ||
+                  activityFilter !== "all"
+                    ? 1
+                    : 0.55,
+              }}
+            >
+              Clear filters
+            </button>
+          </div>
+        )}
+
+        {!loading && customers.length > 0 && (
+          <p style={{ marginBottom: 16 }}>
+            Showing <strong>{filteredCustomers.length}</strong> of{" "}
+            <strong>{customers.length}</strong> customers
+          </p>
+        )}
+
         {loading ? (
           <p>Loading customer data…</p>
         ) : customers.length === 0 ? (
           <p>No registered customers found.</p>
+        ) : filteredCustomers.length === 0 ? (
+          <p>No customers match the selected search and filters.</p>
         ) : (
           <div style={{ overflowX: "auto" }}>
             <table
@@ -158,7 +291,7 @@ export default function AdminUsersPage() {
               </thead>
 
               <tbody>
-                {customers.map((customer) => {
+                {filteredCustomers.map((customer) => {
                   const name =
                     `${customer.first_name ?? ""} ${customer.last_name ?? ""}`.trim() ||
                     "Unnamed customer";
